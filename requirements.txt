@@ -1,0 +1,7 @@
+naff>=2.0.0
+python-dotenv>=0.20.0
+orjson>=3.6.7
+pymongo>=4.3.2
+dpytools
+motor>=3.1.1
+black
