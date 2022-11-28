@@ -5,12 +5,13 @@ import random
 import time
 
 
-class NewMembers(Extension):        
-    print("New Member extension loaded")
+class MemberJoinAndLeave(Extension):
+    print("Member join and leave extension loaded")
+
     @listen()
     async def on_member_remove(self, event: MemberRemove):
         if (
-                event.member.guild.id == 858547359804555264
+            event.member.guild.id == 858547359804555264
         ):  # Only detect if the user left the Prism guild
             if event.member.bot:
                 return
@@ -31,13 +32,15 @@ class NewMembers(Extension):
                 await general.send(random.choice(messages))
                 channel = self.bot.get_channel(897765157940396052)
                 title = f"{event.member.display_name} left the server"
-                embed = naff.Embed(title=title, color=color.BrandColors.RED)
+                embed = Embed(title=title, color=color.BrandColors.RED)
                 embed.set_footer(
                     text=f"Discord name: {event.member.display_name}\nDiscord ID: {event.member.id}",
                     icon_url=event.member.avatar.as_url(),
                 )
                 date_format = "%a, %d %b %Y %I:%M %p"
-                embed.set_author(name=str(event.member), icon_url=event.member.avatar.as_url())
+                embed.set_author(
+                    name=str(event.member), icon_url=event.member.avatar.as_url()
+                )
                 embed.set_thumbnail(url=event.member.avatar.as_url())
                 embed.add_field(
                     name="Joined Server",
@@ -51,6 +54,7 @@ class NewMembers(Extension):
                 )
                 embed.set_footer(text="ID: " + str(event.member.id))
                 await channel.send(embed=embed)
+
     @listen()
     async def on_member_add(self, event: MemberAdd):
         if (
@@ -110,10 +114,12 @@ class NewMembers(Extension):
                     f"Welcome to the party {event.member.display_name}",
                     f"Hey `@everyone` {event.member.display_name} joined Prism",
                 ]
-                await channel.send(f"{random.choice(messages)}\nIf you need anything from staff or simply have questions, ping a <@&858547638719086613>")
+                await channel.send(
+                    f"{random.choice(messages)}\nIf you need anything from staff or simply have questions, ping a <@&858547638719086613>"
+                )
         # elif event.member.guild.id == 861018927752151071:
-            
-    @Task.create(IntervalTrigger(minutes=10))     
+
+    @Task.create(IntervalTrigger(minutes=10))
     async def prismian_upgrade_check():
         print("Checking for Prismian upgrades")
         guild = self.bot.get_guild(858547359804555264)
@@ -140,7 +146,6 @@ class NewMembers(Extension):
                     )
                     print(f"{member.display_name} has been upgraded to Prismian")
         print("Done checking for Prismian upgrades")
-        
 
     # @listen()
     # async def on_ready(self):
@@ -149,4 +154,4 @@ class NewMembers(Extension):
 
 
 def setup(bot):
-    NewMembers(bot)
+    MemberJoinAndLeave(bot)
