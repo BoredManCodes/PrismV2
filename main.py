@@ -11,5 +11,5 @@ async def on_ready():
     print(f"This bot is owned by {bot.owner}")
 
 
-
+bot.load_extension("extensions.member_join_and_leave")
 bot.start(os.getenv("DISCORD_TOKEN"))
