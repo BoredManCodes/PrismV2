@@ -22,4 +22,5 @@ async def on_ready():
 bot.load_extension("extensions.member_join_and_leave")
 bot.load_extension("extensions.member_management")
 bot.load_extension("extensions.utilities")
+bot.load_extension("extensions.message_events")
 bot.start(os.getenv("DISCORD_TOKEN"))

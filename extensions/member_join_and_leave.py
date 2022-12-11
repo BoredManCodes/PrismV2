@@ -3,7 +3,7 @@ from naff.api.events import MemberAdd, Ready, MemberRemove
 from naff.models.discord import color
 import random
 import time
-
+import datetime
 
 class MemberJoinAndLeave(Extension):
     print("Member join and leave extension loaded")
@@ -119,8 +119,8 @@ class MemberJoinAndLeave(Extension):
                 )
         # elif event.member.guild.id == 861018927752151071:
 
-    @Task.create(IntervalTrigger(minutes=10))
-    async def prismian_upgrade_check():
+    @Task.create(IntervalTrigger(hours=2))
+    async def prismian_upgrade_check(self):
         print("Checking for Prismian upgrades")
         guild = self.bot.get_guild(858547359804555264)
         for member in guild.members:
@@ -128,7 +128,7 @@ class MemberJoinAndLeave(Extension):
             new_role = utils.get(guild.roles, name="New Member")
             general = self.bot.get_channel(858547359804555267)
             if prismian_role not in member.roles and new_role in member.roles:
-                duration = datetime.datetime.now() - member.joined_at
+                duration = datetime.datetime.now(tz=datetime.timezone.utc) - member.joined_at
                 hours, remainder = divmod(int(duration.total_seconds()), 3600)
                 days, hours = divmod(hours, 24)
                 if days >= 14:
@@ -147,11 +147,14 @@ class MemberJoinAndLeave(Extension):
                     print(f"{member.display_name} has been upgraded to Prismian")
         print("Done checking for Prismian upgrades")
 
-    # @listen()
-    # async def on_ready(self):
-    #     print("Started prismian upgrade loop")
-    #     await prismian_upgrade_check.start()
-
+    @listen()
+    async def on_ready(self):
+        print("Started prismian upgrade loop")
+        try:
+            await self.prismian_upgrade_check.start()
+        except TypeError:
+            print("Error? What error? I see nothing wrong here...")
+            pass
 
 def setup(bot):
     MemberJoinAndLeave(bot)
