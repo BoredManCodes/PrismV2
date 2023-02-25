@@ -9,13 +9,30 @@ from naff import (
     slash_command,
     OptionTypes,
     Member,
+    listen
 )
 from naff.models.discord import color
+from naff.api.events import MemberUpdate
 
 
 class MemberManagement(Extension):
     print("Member management extension loaded")
-
+    
+    @listen()
+    async def on_member_update(self, event: MemberUpdate):
+        if (
+                event.before.guild.id == 858547359804555264
+                and event.before.display_name != event.after.display_name
+        ):
+            embed = Embed(title=f"Changed Name")
+            embed.add_field(name="User", value=event.before.mention)
+            embed.add_field(name="Before", value=event.before.display_name)
+            embed.add_field(name="After", value=event.after.display_name)
+            embed.set_thumbnail(url=event.before.avatar.as_url())
+            channel = self.bot.get_channel(897765157940396052)
+            await channel.send(embed=embed)
+        
+                
     @slash_command(
         name="whitelist",
         description="Add a user to the whitelist",

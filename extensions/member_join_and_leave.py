@@ -119,7 +119,8 @@ class MemberJoinAndLeave(Extension):
                 )
         # elif event.member.guild.id == 861018927752151071:
 
-    @Task.create(IntervalTrigger(hours=2))
+
+    @Task.create(IntervalTrigger(hours=12))
     async def prismian_upgrade_check(self):
         print("Checking for Prismian upgrades")
         guild = self.bot.get_guild(858547359804555264)
@@ -134,7 +135,7 @@ class MemberJoinAndLeave(Extension):
                 if days >= 14:
                     mod_log = self.bot.get_channel(897765157940396052)
                     await mod_log.send(
-                        f"{member.display_name} has been a new member for {days} days and upgraded to Prismian today!"
+                        f"{member.display_name} has upgraded to Prismian!"
                     )
                     await member.remove_role(new_role)
                     await member.add_role(prismian_role)
@@ -147,14 +148,14 @@ class MemberJoinAndLeave(Extension):
                     print(f"{member.display_name} has been upgraded to Prismian")
         print("Done checking for Prismian upgrades")
 
-    @listen()
-    async def on_ready(self):
-        print("Started prismian upgrade loop")
-        try:
-            await self.prismian_upgrade_check.start()
-        except TypeError:
-            print("Error? What error? I see nothing wrong here...")
-            pass
+    # @listen()
+    # async def on_ready(self):
+    #     print("Started prismian upgrade loop")
+    #     try:
+    #         await self.prismian_upgrade_check.start()
+    #     except TypeError:
+    #         print("Error? What error? I see nothing wrong here...")
+    #         pass
 
 def setup(bot):
     MemberJoinAndLeave(bot)
